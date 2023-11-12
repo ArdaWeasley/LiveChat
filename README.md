@@ -30,7 +30,7 @@ Once you have LiveChat up and running, join the chat room and start messaging ot
 
 ## Video
 
-Check out our demo video to see LiveChat in action: []()
+Check out our demo video to see LiveChat in action: ![](https://i.imgur.com/51XtFbA.gif)
 
 ## Contributing
 
