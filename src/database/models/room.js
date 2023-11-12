@@ -1,3 +1,4 @@
+// This system is still not finished, only the model is available
 const { model, Schema } = require("mongoose")
 module.exports = model("chat", new Schema(
     {
