@@ -54,27 +54,6 @@ app.get('/users', async(req,res) => {
     res.json({result:users})
 })
 
-/*app.post('/login', async(req,res) => {
-    const body = req.body
-    if(!body.mail || !body.password) return res.status(503).json({code: 'FailedLogin', message: "Email or password is incorrect."})
-    let find = await user.findOne({mail: body.mail, password: body.password})
-    if(!find) return res.status(503).json({code: 'FailedLogin', message: "Email or password is incorrect. But which one?"})
-
-    let amc =  {
-        ws: "ws://127.0.0.1:8000",
-        user: find,
-        nonce: Date.now()
-    }
-    req.login(amc, async(err)=>{
-        if(err) {
-            console.log(err)
-            return res.status(500).json({code: "InternalServerError", messaage: "Try to contact or try again in 2 minutes."})
-        }
-        return res.redirect('/')
-    })
-    
-})*/
-
 app.all('*', async (req, res) => res.status(405).json({ code: 'MethodNotAllowed', message: `${req.method} not allowed` }));
 
 app.use((req,res) => res.json({code: "ResourceNotFound", message: `${req.url} does not exist`}));
