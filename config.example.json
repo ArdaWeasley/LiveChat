@@ -1,4 +1,8 @@
 {
     "mongo": "yourmongourl",
-    "ws": "ws://127.0.0.1:8000"
+    "ws": "ws://yourserver:port",
+    "messages": {
+        "joined": "{username} joined to chat!",
+        "left": "{username} leaved chat!"
+    }
 }
