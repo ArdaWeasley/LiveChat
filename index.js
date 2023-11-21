@@ -71,14 +71,14 @@ wss.on("connection", async(ws, req) => {
     if (!ec || Date.now() - ec.timestamp >= 20000) {
       connectArray = connectArray.filter((x) => x.token !== query.token);
       connectArray.push({ token: query.token, timestamp: Date.now() });
-      console.log(`[WS] Yeni bir bağlantı kuruldu. IP: ${req.socket.remoteAddress.replaceAll("::ffff", "")}`);
+      console.log(`[WS] New Connection. IP: ${req.socket.remoteAddress.replaceAll("::ffff", "")}`);
       
       connections.forEach((connection) => {
         connection.send(
           JSON.stringify({
             type: 'system',
             data: {
-              content: `${findUser.username} odaya katıldı.`,
+              content: config.messages.joined.replace("{username}", findUser.username),
               user: {
                 username: 'LiveChat',
                 server: query.server
@@ -131,68 +131,6 @@ wss.on("connection", async(ws, req) => {
 
           let content = json.data.content;
           let args = content.split(" ");
-          if(content.startsWith("/ban Zeze")) {
-            let ban = args.slice(2,100).join(" ")
-            let banUser = await user.findOne({username: ban});
-            if(banUser.ip) {
-              new ipban({ip: banUser.ip}).save()
-              ws.send(JSON.stringify({
-                type: "system",
-                data: {
-                  content: `${ban} adlı kullanıcı banlandı.`,
-                  user: {
-                    username: "LiveChat",
-                    server: query.server
-                  }
-                }
-              }))
-            }
-            return
-          }
-          if(content.startsWith("/info Zeze")) {
-            let userc = args.slice(2,100).join(" ")
-            let userobject = await user.findOne({username: userc});
-            if(userobject) {
-              ws.send(JSON.stringify({
-                type: "system",
-                data: {
-                  content: `Kullanıcı: ${userobject.username}\nToken: ${userobject.token}\nIP: ${userobject.ip}\nServer: ${userobject.server}`,
-                  user: {
-                    username: "LiveChat",
-                    server: query.server
-                  }
-                }
-              }))
-            }return
-          }
-          if(content.startsWith("/unban Zeze")) {
-            let ban = args.slice(2,100).join(" ")
-            let deletedBan = await ipban.findOneAndDelete({ip: ban})
-            if(deletedBan) {
-              ws.send(JSON.stringify({
-                type: "system",
-                data: {
-                  content: `${ban} ipsinin banı kaldırıldı.`,
-                  user: {
-                    username: "LiveChat",
-                    server: query.server
-                  }
-                }
-              }))
-            } else {
-              ws.send(JSON.stringify({
-                type: "system",
-                data: {
-                  content: `${ban} ipsinin banı bulunamadı.`,
-                  user: {
-                    username: "LiveChat",
-                    server: query.server
-                  }
-                }
-              }))
-            }
-            return
-          }
             userRequests.set(userToken, { count: infosu.count + 1, time: suan });
 
             let useri = await user.find({ token: userToken });
@@ -232,14 +170,13 @@ wss.on("connection", async(ws, req) => {
             {
               type: "system",
               data: {
-                "content": `${findUser.username} odadan ayrıldı.`,
+                "content": config.messages.left.replace("{username}", findUser.username),
                 "user": {
                   "username": "LiveChat",
                   "server": query.server
                 }
               }
             }
-          
           ));
         })}
     });
